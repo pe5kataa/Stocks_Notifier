@@ -1,0 +1,15 @@
+# Core ELT pipeline dependencies
+# Pinned to the versions in the `market-intel` conda env for reproducibility.
+
+# Data extraction
+yfinance==0.2.57
+
+# Data manipulation
+pandas==3.0.3
+
+# Database (Postgres) access
+SQLAlchemy==2.0.50
+psycopg2-binary==2.9.10   # binary build: installs without local Postgres build tools
+
+# Configuration / secrets
+python-dotenv==1.2.1
