@@ -1,19 +1,18 @@
 import requests
-from datetime import date
+from datetime import date, timedelta
 import pandas as pd
 import yfinance as yf
 
-def extract_prices(list:list):
-    end_date = date.today().isoformat()
+def extract_prices(tickers:list, start_date:str, end_date:str):
     data = yf.download(
-        list, 
-        start="2020-01-01", 
+        tickers, 
+        start= start_date, 
         end=end_date,
         group_by='ticker'
     )
     dfs = []
-    for ticker in list:
-        ticker_df = data[ticker]
+    for ticker in tickers:
+        ticker_df = data[ticker].copy()
         ticker_df["Ticker"] = ticker
         dfs.append(ticker_df)
     
@@ -22,8 +21,9 @@ def extract_prices(list:list):
             
     return final_df
 
-tickers = ["AAPL", "MSFT", "NVDA", "TSLA"]
-data = extract_prices(tickers)
-print(data)
-data.to_csv("stocks.csv")
 
+def extract_daily_prices(tickers):
+    today = date.today()
+    start = today.isoformat()
+    end = (today + timedelta(days=1)).isoformat()
+    return extract_prices(tickers, start, end)
