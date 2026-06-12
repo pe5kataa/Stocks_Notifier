@@ -1,4 +1,3 @@
-import requests
 from datetime import date, timedelta
 import pandas as pd
 import yfinance as yf
