@@ -7,6 +7,12 @@ def _insert_on_conflict_nothing(table, conn, keys, data_iter):
     data = [dict(zip(keys, row)) for row in data_iter]
     stmt = insert(table.table).values(data).on_conflict_do_nothing()
     result = conn.execute(stmt)
+    
+    attempted = len(data)
+    inserted = result.rowcount
+    skipped = attempted - inserted
+    
+    print(f"Load: attempted {attempted} | inserted {inserted} | skipped {skipped} (duplicates)")
     return result.rowcount
 
 

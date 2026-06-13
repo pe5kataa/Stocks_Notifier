@@ -9,10 +9,17 @@ MARKET_INTEL_PY = "/opt/miniconda3/envs/market-intel/bin/python"
 def run_daily_price_pipeline():
     
     @task.external_python(python=MARKET_INTEL_PY, retries = 20, retry_delay=timedelta(seconds=10))
-    def extract():
-        from ingestion.stocks_extract import extract_daily_prices
+    def extract(ds):
+        from ingestion.stocks_extract import extract_prices
+        from datetime import date, timedelta
+        
         tickers = ["AAPL", "MSFT", "NVDA", "TSLA"]
-        df = extract_daily_prices(tickers)
+
+        today = ds
+        print(ds)
+        end_date = (date.fromisoformat(ds) + timedelta(days=1))
+        
+        df = extract_prices(tickers, today, end_date)
         if df.empty:
             print("NO MARKET DATA TODAY")
             sys.exit(99) 
