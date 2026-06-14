@@ -20,4 +20,7 @@ stock_prices = Table(
 )
 
 if __name__ == "__main__":
+    with engine.begin() as conn:
+        conn.execute(text("CREATE SCHEMA IF NOT EXISTS raw"))
     metadata.create_all(engine)
+    print("Schema 'raw' and table 'raw_stock_prices' are ready.")
