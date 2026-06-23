@@ -8,7 +8,12 @@ MARKET_INTEL_PY = "/opt/miniconda3/envs/market-intel/bin/python"
 @dag(dag_id="daily_stock_upload",start_date=datetime(2026, 1, 1), schedule="@daily", catchup=False)
 def run_daily_price_pipeline():
     
-    @task.external_python(python=MARKET_INTEL_PY, retries = 20, retry_delay=timedelta(seconds=10))
+    @task.external_python(
+        python=MARKET_INTEL_PY,
+        skip_on_exit_code=99,                 # exit 99 → mark task SKIPPED (no data day)
+        retries=3,
+        retry_delay=timedelta(minutes=5),     # retries are for transient errors (rate limits)
+    )
     def extract(ds):
         from ingestion.stocks_extract import extract_prices
         from datetime import date, timedelta
@@ -22,7 +27,6 @@ def run_daily_price_pipeline():
         df = extract_prices(tickers, today, end_date)
         if df.empty:
             print("NO MARKET DATA TODAY")
-            sys.exit(99) 
         df.to_csv("/tmp/stocks.csv", index=False)
         return "/tmp/stocks.csv" 
 
