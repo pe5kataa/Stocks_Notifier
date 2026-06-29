@@ -13,7 +13,7 @@ def run_daily_price_pipeline():
     @task.external_python(
         python=MARKET_INTEL_PY,
         skip_on_exit_code=99,                 # exit 99 → mark task SKIPPED (no data day)
-        retries=3,
+        retries=30,
         retry_delay=timedelta(minutes=5),     # retries are for transient errors (rate limits)
     )
     def extract(ds):
@@ -22,13 +22,16 @@ def run_daily_price_pipeline():
         
         tickers = ["AAPL", "MSFT", "NVDA", "TSLA"]
 
-        today = ds
+        run_date = date.fromisoformat(ds)
         print(ds)
         end_date = (date.fromisoformat(ds) + timedelta(days=1))
         
-        df = extract_prices(tickers, today, end_date)
+        df = extract_prices(tickers, ds, end_date)
         if df.empty:
-            print("NO MARKET DATA TODAY")
+            if run_date.weekday() >= 5:
+                sys.exit(99) 
+            else:
+                raise RuntimeError(f"yfinance rate-limit -> will retry in 5 minutes")
         df.to_csv("/tmp/stocks.csv", index=False)
         return "/tmp/stocks.csv" 
 
