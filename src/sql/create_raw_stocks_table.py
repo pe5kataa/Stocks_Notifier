@@ -14,7 +14,6 @@ stock_prices = Table(
     Column("High", Numeric),
     Column("Low", Numeric),
     Column("Close", Numeric),
-    Column("Adj Close", Numeric),
     Column("Volume", Numeric),
     Column("loaded_at", TIMESTAMP, server_default=text("CURRENT_TIMESTAMP")),
 )
