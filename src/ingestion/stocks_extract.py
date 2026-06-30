@@ -19,10 +19,3 @@ def extract_prices(tickers:list, start_date:str, end_date:str):
     final_df = final_df.reset_index()
             
     return final_df
-
-
-def extract_daily_prices(tickers):
-    today = date.today()
-    start = today.isoformat()
-    end = (today + timedelta(days=1)).isoformat()
-    return extract_prices(tickers, start, end)
