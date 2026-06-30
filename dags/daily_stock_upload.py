@@ -14,19 +14,24 @@ def run_daily_price_pipeline():
         python=MARKET_INTEL_PY,
         skip_on_exit_code=99,                 # exit 99 → mark task SKIPPED (no data day)
         retries=30,
-        retry_delay=timedelta(minutes=5),     # retries are for transient errors (rate limits)
+        retry_delay=timedelta(minutes=1),     # retries are for transient errors (rate limits)
     )
     def extract(ds):
+        import sys
         from ingestion.stocks_extract import extract_prices
         from datetime import date, timedelta
-        
+
         tickers = ["AAPL", "MSFT", "NVDA", "TSLA"]
 
         run_date = date.fromisoformat(ds)
         print(ds)
         end_date = (date.fromisoformat(ds) + timedelta(days=1))
-        
+
         df = extract_prices(tickers, ds, end_date)
+
+        # yfinance NaN-fills rows when rate-limited → drop rows with no real price
+        df = df.dropna()
+
         if df.empty:
             if run_date.weekday() >= 5:
                 sys.exit(99) 
@@ -47,7 +52,7 @@ def run_daily_price_pipeline():
         return (f"set -a && source '{PROJECT}/.env' && set +a && "
                 f"export DBT_PROFILES_DIR='{PROJECT}/market_intel' && "
                 f"cd '{PROJECT}/market_intel' && "
-                f"{DBT} run")
+                f"{DBT} build")
     
        
     load(extract()) >> run_dbt()
