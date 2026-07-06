@@ -5,3 +5,7 @@ sources:
     schema: raw
     tables:
       - name: raw_stock_prices
+        loaded_at_field: loaded_at
+        freshness:
+          warn_after: {count: 3, period: day}
+          error_after: {count: 5, period: day}
