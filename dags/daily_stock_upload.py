@@ -1,11 +1,11 @@
 from airflow.decorators import dag, task
 from datetime import datetime, timedelta
 import sys
+import os
 
-MARKET_INTEL_PY = "/opt/miniconda3/envs/market-intel/bin/python"
-PROJECT = "/Users/petarnikodimov/Documents/Financial News"
-DBT = "/opt/miniconda3/envs/market-intel/bin/dbt"
-
+MARKET_INTEL_PY = os.getenv("MARKET_INTEL_PY")
+PROJECT         = os.getenv("PROJECT")
+DBT             = os.getenv("DBT")
 
 @dag(dag_id="daily_stock_upload",start_date=datetime(2026, 1, 1), schedule="@daily", catchup=False)
 def run_daily_price_pipeline():
@@ -49,9 +49,7 @@ def run_daily_price_pipeline():
         
     @task.bash()
     def run_dbt() -> str:
-        return (f"set -a && source '{PROJECT}/.env' && set +a && "
-                f"export DBT_PROFILES_DIR='{PROJECT}/market_intel' && "
-                f"cd '{PROJECT}/market_intel' && "
+        return (f"cd '{PROJECT}/market_intel' && "
                 f"{DBT} build")
     
        
