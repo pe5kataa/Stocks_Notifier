@@ -7,11 +7,12 @@ name = "market-intel"
 version = "0.1.0"
 requires-python=">=3.12"
 dependencies = [
-    "yfinance",
-    "pandas",
-    "sqlalchemy",
-    "psycopg2-binary",
-    "python-dotenv"
+    "yfinance==0.2.57",
+    "pandas==3.0.3",
+    "sqlalchemy==2.0.50",
+    "psycopg2-binary==2.9.10",
+    "python-dotenv==1.2.1",
+    "dbt-postgres==1.8.2",   
 ]
 
 [tool.setuptools.packages.find]
