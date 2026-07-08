@@ -47,12 +47,21 @@ def run_daily_price_pipeline():
         df = pd.read_csv(path)
         load_stock_prices(df)
         
+    @task.external_python(python=MARKET_INTEL_PY)
+    def create_raw_table():
+        # Ensure schema and table are created
+        from sqlalchemy import text
+        from sql.create_raw_stocks_table import metadata, engine
+        with engine.begin() as conn:
+            conn.execute(text("CREATE SCHEMA IF NOT EXISTS raw"))
+        metadata.create_all(engine)
+
     @task.bash()
     def run_dbt() -> str:
         return (f"cd '{PROJECT}/market_intel' && "
                 f"{DBT} build")
-    
-       
-    load(extract()) >> run_dbt()
+
+
+    create_raw_table() >> load(extract()) >> run_dbt()
     
 run_daily_price_pipeline()
