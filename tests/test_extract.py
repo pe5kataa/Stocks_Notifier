@@ -7,9 +7,15 @@ def test_extract_prices(mock_download):
     
     tickers = ["AAPL", "MSFT", "NVDA", "TSLA"] 
     
-    df = pd.DataFrame({("Close", "AAPL"): 100, ("Close", "MSFT"): 100, 
-                       ("Close", "NVDA"): 100, ("Close", "TSLA"): 100},
-                      index=pd.to_datetime("2026-01-01"))
+    df = pd.DataFrame(
+        {
+            ("AAPL", "Close"): [100],
+            ("MSFT", "Close"): [100],
+            ("NVDA", "Close"): [100],
+            ("TSLA", "Close"): [100],
+        },
+        index=pd.to_datetime(["2026-01-01"]),
+    )
     
     mock_download.return_value = df
     
