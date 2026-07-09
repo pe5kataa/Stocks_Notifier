@@ -16,10 +16,7 @@ RUN python -m venv /opt/venvs/market-intel
 # 4. Install project (pyproject deps + src) + dbt into Env B.
 COPY --chown=airflow:0 pyproject.toml /opt/airflow/project/pyproject.toml
 COPY --chown=airflow:0 src            /opt/airflow/project/src
-RUN /opt/venvs/market-intel/bin/pip install --no-cache-dir \
-        /opt/airflow/project \
-        dbt-postgres \
-        cloudpickle
+RUN /opt/venvs/market-intel/bin/pip install --no-cache-dir /opt/airflow/project
 
 # 5. Bake your dags + dbt project into the image (immutable, self-contained).
 COPY --chown=airflow:0 dags         /opt/airflow/dags
