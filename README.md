@@ -23,24 +23,9 @@ A fully containerized **ELT data pipeline** that extracts daily stock prices, lo
 
 ## 🏗️ Architecture
 
-```mermaid
-flowchart LR
-    A([yfinance API]) -->|extract| B[extract]
-    B -->|CSV| C[load]
-    S[create_raw_table] --> C
-    C -->|idempotent insert| D[(Azure PostgreSQL)]
-    D -->|dbt build| E[staging]
-    E --> F[marts]
-
-    subgraph AF [Apache Airflow · Docker · LocalExecutor]
-        S
-        B
-        C
-        R[run_dbt]
-    end
-
-    R -.-> E
-```
+<p align="center">
+  <img src="docs/diagramm.png" alt="Stocks Notifier architecture" width="900"/>
+</p>
 
 The pipeline runs as an Airflow DAG (`daily_stock_upload`) on a `@daily` schedule:
 
