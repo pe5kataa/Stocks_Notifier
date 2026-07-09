@@ -24,7 +24,7 @@ A fully containerized **ELT data pipeline** that extracts daily stock prices, lo
 ## 🏗️ Architecture
 
 <p align="center">
-  <img src="docs/diagramm.png" alt="Stocks Notifier architecture" width="900"/>
+  <img src="docs/diagram.png" alt="Stocks Notifier architecture" width="900"/>
 </p>
 
 The pipeline runs as an Airflow DAG (`daily_stock_upload`) on a `@daily` schedule:
