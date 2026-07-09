@@ -200,15 +200,3 @@ pytest
 │   └── tests/                 # singular dbt tests
 └── tests/                     # pytest unit tests
 ```
-
----
-
-## 🗺️ Roadmap
-
-- [x] Containerize the stack (Docker + Compose)
-- [x] Auto-create the raw schema/table (no manual step)
-- [x] Deploy to an always-on Azure VM
-- [ ] Add a notification step (the "notifier") on significant price movements
-- [ ] CI: run `pytest` (and `dbt build` against a test DB) on every push
-- [ ] Local Postgres warehouse option for fully self-contained runs
-- [ ] Expand the ticker universe & add more marts (moving averages, volatility)
