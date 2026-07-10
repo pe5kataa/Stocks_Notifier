@@ -1,4 +1,4 @@
-from ingestion.stocks_extract import extract_prices, extract_prices
+from ingestion.stocks_extract import extract_prices
 from ingestion.stocks_load import load_stock_prices
 
 

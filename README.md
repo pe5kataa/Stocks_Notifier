@@ -40,6 +40,16 @@ The pipeline runs as an Airflow DAG (`daily_stock_upload`) on a `@daily` schedul
 
 ---
 
+## ✅ Pipeline in Action
+
+A successful end-to-end run in Airflow, running on the Azure VM — every task green:
+
+<p align="center">
+  <img src="docs/dag_run.png" alt="Successful DAG run — all tasks green" width="850"/>
+</p>
+
+---
+
 ## 🧰 Tech Stack
 
 | Layer | Tooling |
