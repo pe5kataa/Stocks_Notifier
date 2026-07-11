@@ -1,7 +1,10 @@
 version: 2
 
-models: 
+models:
   - name: mrts_daily_returns
+    description: >
+      Per-ticker daily metrics — price change, daily return,
+      7/30-day moving averages, and 7/30-day rolling volatility.
     columns:
       - name: ticker
         data_tests:
@@ -15,10 +18,14 @@ models:
         data_tests:
           - not_null
 
-      - name: price_change
+      - name: ma_7d
         data_tests:
           - not_null
 
-      - name: daily_return
+      - name: ma_30d
         data_tests:
-          - not_null
+          - not_null   
+
+      # price_change, daily_return, vol_7d and vol_30d are intentionally NOT
+      # not_null-tested: they are legitimately NULL for the earliest rows of
+      # each ticker (no prior day for LAG; STDDEV needs more than one value).
